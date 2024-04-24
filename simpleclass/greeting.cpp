@@ -1,9 +1,20 @@
 #include <iostream>
 #include "greeting.hpp"
+#include <string>
 
 using namespace std;
 
-void greeting::Print()
+void Greeting::Print()
 {
-    cout << message << endl;
+    cout << message << " Tick:" << tick << endl;
+};
+
+void Greeting::Tick()
+{
+    tick++;
+};
+
+
+Greeting::Greeting(string message){
+    (*this).message = message;
 };

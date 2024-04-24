@@ -2,11 +2,14 @@
 
 using namespace std;
 
-class greeting
+class Greeting
 {
     public:
+    Greeting(string message);
     void Print();
+    void Tick();
 
     private:
         string message = "test";
+        int tick = 0;
 };
