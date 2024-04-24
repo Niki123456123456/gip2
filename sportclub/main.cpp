@@ -9,7 +9,8 @@ int main()
     string abbreviation;
     cin >> abbreviation;
 
-    TeamStatistics s= TeamStatistics(abbreviation);
+    TeamStatistics s = TeamStatistics(abbreviation);
 
-    cout << s.Abbreviation();
+    //cout << s.Abbreviation();
+    s.WriteToCout();
 }
