@@ -9,6 +9,7 @@ public:
     string Abbreviation();
     int GoalDifference();
     void WriteToCout();
+    void PushGame(int goals_scored, int goals_received);
 
 private:
     string abbreviation;

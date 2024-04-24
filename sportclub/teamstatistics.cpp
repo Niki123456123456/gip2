@@ -4,6 +4,17 @@
 
 using namespace std;
 
+void TeamStatistics::PushGame(int goals_scored, int goals_received){
+    games++;
+    goals += goals_scored;
+    opposing_goals += goals_received;
+    if (goals_scored > goals_received){
+        points += 3;
+    } else if (goals_scored == goals_received) {
+        points += 1;
+    }
+}
+
 TeamStatistics::TeamStatistics(string abbreviation){
     (*this).abbreviation = abbreviation;
     goals = 0;
