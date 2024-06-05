@@ -109,52 +109,6 @@ public:
         nodes.push_back(node);
     }
 
-    bool are_connected(int a, int b)
-    {
-        int n = nodes.size();
-        return a < n && b < n && matrix[a][b] == 1;
-    }
-
-    void init_matrix()
-    {
-        int n = nodes.size();
-        matrix = std::vector<std::vector<float>>(n, std::vector<float>(n, std::numeric_limits<float>::infinity()));
-        for (int i = 0; i < n; i++)
-        {
-            for (int j = 0; j < n; j++)
-            {
-                auto a = nodes[i];
-                auto b = nodes[j];
-                int dx = abs(a->pos_x - b->pos_x);
-                int dy = abs(a->pos_y - b->pos_y);
-                if (dx <= 1 && dy == 0)
-                {
-                    matrix[i][j] = dx;
-                }
-                else if (dx == 0 && dy <= 1)
-                {
-                    matrix[i][j] = dy;
-                }
-            }
-        }
-
-        for (int k = 0; k < n; ++k)
-        {
-            for (int i = 0; i < n; ++i)
-            {
-                for (int j = 0; j < n; ++j)
-                {
-                    if (matrix[i][k] < std::numeric_limits<float>::infinity() &&
-                        matrix[k][j] < std::numeric_limits<float>::infinity() &&
-                        matrix[i][j] > matrix[i][k] + matrix[k][j])
-                    {
-                        matrix[i][j] = matrix[i][k] + matrix[k][j];
-                    }
-                }
-            }
-        }
-    }
-
     void get_shortest_distances(int start_costs, string node_name, map<string, PathCost> *result)
     {
         for (auto &node : nodes)
@@ -165,9 +119,9 @@ public:
                 {
                     int dx = abs(node->pos_x - node2->pos_x);
                     int dy = abs(node->pos_y - node2->pos_y);
-                    if (dx == 1 && dy == 0 || dx == 0 && dy == 1)
+                    if (dx <= 1 && dy == 0 || dx == 0 && dy <= 1)
                     {
-                        int neighbor_total_costs = 1 + start_costs;
+                        int neighbor_total_costs = max(dx, dy) + start_costs;
                         bool found_new_shortest_path = true;
                         auto it = result->find(node2->name);
                         if (it != result->end())
@@ -239,10 +193,28 @@ int main()
         }
     }
 
+    string node_name = "n_3_3";
+
+    //std::getline(std::cin, node_name);
+
+    auto costs = new std::map<std::string, PathCost>();
+    g.get_shortest_distances(0, node_name, costs);
+
+    for (const auto &pair : (*costs))
+    {
+        // NODE_2_1 2 NODE_2_2
+        if (pair.second.total_costs == 0) {
+            std::cout << pair.first << " " << pair.second.total_costs << " -" << std::endl;
+        } else {
+            std::cout << pair.first << " " << pair.second.total_costs << " " << pair.second.predecessor << std::endl;
+        }
+        
+    }
+
     return 0;
 }
 
 /*
 build command: g++ -g main.cpp -o main.exe
-run command in git bash: ./main.exe < ./maze.txt | neato -Tpdf > ./output.pdf
+run command in git bash: ./main.exe
 */
