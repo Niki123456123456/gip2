@@ -3,6 +3,7 @@
 #include <vector>
 #include <limits>
 #include <cstdlib>
+#include <map>
 
 using namespace std;
 
@@ -65,6 +66,13 @@ public:
     }
 
 private:
+};
+
+class PathCost
+{
+public:
+    int total_costs;
+    string predecessor;
 };
 
 class Graph
@@ -147,6 +155,50 @@ public:
         }
     }
 
+    void get_shortest_distances(int start_costs, string node_name, map<string, PathCost> *result)
+    {
+        for (auto &node : nodes)
+        {
+            if (node->name == node_name)
+            {
+                for (auto &node2 : nodes)
+                {
+                    int dx = abs(node->pos_x - node2->pos_x);
+                    int dy = abs(node->pos_y - node2->pos_y);
+                    if (dx == 1 && dy == 0 || dx == 0 && dy == 1)
+                    {
+                        int neighbor_total_costs = 1 + start_costs;
+                        bool found_new_shortest_path = true;
+                        auto it = result->find(node2->name);
+                        if (it != result->end())
+                        {
+                            found_new_shortest_path = neighbor_total_costs < it->second.total_costs;
+                            if (found_new_shortest_path)
+                            {
+                                PathCost cost = PathCost();
+                                cost.predecessor = node_name;
+                                cost.total_costs = neighbor_total_costs;
+                                (*result)[node2->name] = cost;
+                            }
+                        }
+                        else
+                        {
+                            PathCost cost = PathCost();
+                            cost.predecessor = node_name;
+                            cost.total_costs = neighbor_total_costs;
+                            (*result)[node2->name] = cost;
+                        }
+                        if (found_new_shortest_path)
+                        {
+                            get_shortest_distances(neighbor_total_costs, node2->name, result);
+                        }
+                    }
+                }
+                break;
+            }
+        }
+    }
+
 private:
     std::vector<Node *> nodes;
     std::vector<std::vector<float>> matrix;
@@ -187,18 +239,10 @@ int main()
         }
     }
 
-    g.init_matrix();
-
-    // 0 std::cout << g.are_connected(0,1) << "\n";
-    // 1 std::cout << g.are_connected(1,1) << "\n";
-    // 1 std::cout << g.are_connected(1,2) << "\n";
-
-    g.ToStream(std::cout);
     return 0;
 }
 
 /*
 build command: g++ -g main.cpp -o main.exe
 run command in git bash: ./main.exe < ./maze.txt | neato -Tpdf > ./output.pdf
-
 */
