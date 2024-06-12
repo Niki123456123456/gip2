@@ -162,9 +162,12 @@ int main()
 {
     std::vector<std::vector<Field *>> fields = std::vector<std::vector<Field *>>();
 
+    int numberOfLines;
+    std::cin >> numberOfLines;
     string input;
-    while (std::getline(std::cin, input))
+    for (int i = 0; i <= 5; i++)
     {
+        std::getline(std::cin, input);
         std::vector<Field *> f = std::vector<Field *>();
         for (char c : input)
         {
@@ -193,9 +196,9 @@ int main()
         }
     }
 
-    string node_name = "n_3_3";
-
-    //std::getline(std::cin, node_name);
+    // string node_name = "n_3_3";
+    string node_name;
+    std::getline(std::cin, node_name);
 
     auto costs = new std::map<std::string, PathCost>();
     g.get_shortest_distances(0, node_name, costs);
@@ -203,12 +206,14 @@ int main()
     for (const auto &pair : (*costs))
     {
         // NODE_2_1 2 NODE_2_2
-        if (pair.second.total_costs == 0) {
+        if (pair.second.total_costs == 0)
+        {
             std::cout << pair.first << " " << pair.second.total_costs << " -" << std::endl;
-        } else {
+        }
+        else
+        {
             std::cout << pair.first << " " << pair.second.total_costs << " " << pair.second.predecessor << std::endl;
         }
-        
     }
 
     return 0;
@@ -216,5 +221,5 @@ int main()
 
 /*
 build command: g++ -g main.cpp -o main.exe
-run command in git bash: ./main.exe
+run command in git bash: ./main.exe < ./maze.txt
 */
