@@ -1,0 +1,12 @@
+4
+050 file0.txt
+022 file1.txt
+351 file2.txt
+063 file3.txt
+6
+chmod o+r file1.txt
+chmod g-x file0.txt
+chmod u+r file1.txt
+chmod u+r file0.txt
+chmod u+x file1.txt
+chmod o-w file1.txt
